@@ -1,0 +1,9 @@
+--database=postgresql
+--css=tailwind
+--javascript=bun
+--skip-jbuilder
+--skip-test
+--skip-system-test
+--no-devcontainer
+
+--template=./template.rb
