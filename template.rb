@@ -72,7 +72,6 @@ after_bundle do
   end
 
   run 'bundle exec tapioca init'
-  run 'bin/tapioca dsl'
 
   say_status("bun", "Installing client side dependencies...", :blue)
   run 'bun add -d eslint'

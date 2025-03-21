@@ -2,8 +2,7 @@
 --css=tailwind
 --javascript=bun
 --skip-jbuilder
---skip-test
---skip-system-test
 --no-devcontainer
 
 --template=https://raw.githubusercontent.com/jurgen1c/rails-boilerplate/refs/heads/main/template.rb
+-T
