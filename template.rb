@@ -58,10 +58,24 @@ after_bundle do
     ERB
   end
 
+  inject_into_file "spec/spec_helper.rb", before: "RSpec.configure do |config|\n" do
+    <<-RUBY
+    require 'simplecov'
+    SimpleCov.start 'rails' do
+      enable_coverage :branch
+      add_group "Services", "app/services"
+      add_group "Rest Clients", "app/rest_clients"
+      minimum_coverage line: 80, branch: 70
+      maximum_coverage_drop line: 5, branch: 10
+    end
+  RUBY
+  end
+
   run 'bundle exec tapioca init'
+  run 'bin/tapioca dsl'
 
   say_status("bun", "Installing client side dependencies...", :blue)
-  run 'bun add eslint --dev'
+  run 'bun add -d eslint'
   run 'bun add flowbite postcss'
 
   git add: '.'
@@ -140,3 +154,26 @@ module.exports = {
   ]
 }
 JS
+
+# Add this template directory to source_paths so that Thor actions like
+# copy_file and template resolve against our source files. If this file was
+# invoked remotely via HTTP, that means the files are not present locally.
+# In that case, use `git clone` to download them to a local temporary dir.
+def add_template_repository_to_source_path
+  if __FILE__ =~ %r{\Ahttps?://}
+    require "tmpdir"
+    source_paths.unshift(tempdir = Dir.mktmpdir("rails-template-"))
+    at_exit { FileUtils.remove_entry(tempdir) }
+    git clone: [
+      "--quiet",
+      "https://github.com/jurgen1c/rails-boilerplate.git",
+      tempdir
+    ].map(&:shellescape).join(" ")
+
+    if (branch = __FILE__[%r{rails-template/(.+)/template.rb}, 1])
+      Dir.chdir(tempdir) { git checkout: branch }
+    end
+  else
+    source_paths.unshift(File.dirname(__FILE__))
+  end
+end
