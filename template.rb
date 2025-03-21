@@ -65,7 +65,6 @@ after_bundle do
   end
 end
 
-# copy_file 'templates/pagy.rb', 'config/initializers/pagy.rb'
 require "open-uri"
 file_content = URI.open("https://raw.githubusercontent.com/jurgen1c/rails-boilerplate/main/templates/pagy.rb").read
 initializer 'pagy.rb', file_content
