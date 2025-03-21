@@ -69,12 +69,12 @@ require "open-uri"
 pagy_content = URI.open("https://raw.githubusercontent.com/jurgen1c/rails-boilerplate/main/templates/pagy.rb").read
 initializer 'pagy.rb', pagy_content
 
-run 'bun install eslint --save-dev'
-run 'bun install flowbite postcss'
-
 empty_directory 'app/views/components'
 av_content = URI.open("https://raw.githubusercontent.com/jurgen1c/rails-boilerplate/main/templates/application_view_component.rb").read
+say_status("fetch", "Downloading remote templates tarball...", :blue)
+# Your tarball extraction code...
 create_file 'app/views/components/application_view_component.rb', av_content
+say_status("create", "Created Application View component", :green)
 
 empty_directory 'app/views/components/concerns'
 styles_content = URI.open("https://raw.githubusercontent.com/jurgen1c/rails-boilerplate/main/templates/style_variants.rb").read
@@ -135,7 +135,11 @@ module.exports = {
 }
 JS
 
+run 'bun add eslint --dev'
+run 'bun add flowbite postcss'
+
 git add: '.'
 git commit: "-m 'initial commit'"
 
+say_status("create", "Created initial commit", :green)
 rails_command 'db:create'
