@@ -66,23 +66,27 @@ after_bundle do
 end
 
 require "open-uri"
-file_content = URI.open("https://raw.githubusercontent.com/jurgen1c/rails-boilerplate/main/templates/pagy.rb").read
-initializer 'pagy.rb', file_content
+pagy_content = URI.open("https://raw.githubusercontent.com/jurgen1c/rails-boilerplate/main/templates/pagy.rb").read
+initializer 'pagy.rb', pagy_content
 
 run 'bun install eslint --save-dev'
 run 'bun install flowbite postcss'
 
 empty_directory 'app/views/components'
-copy_file 'templates/application_view_component.rb', 'app/views/components/application_view_component.rb'
+av_content = URI.open("https://raw.githubusercontent.com/jurgen1c/rails-boilerplate/main/templates/application_view_component.rb").read
+create_file 'app/views/components/application_view_component.rb', av_content
 
 empty_directory 'app/views/components/concerns'
-copy_file 'templates/style_variants.rb', 'app/views/components/concerns/style_variants.rb'
+styles_content = URI.open("https://raw.githubusercontent.com/jurgen1c/rails-boilerplate/main/templates/style_variants.rb").read
+create_file 'app/views/components/concerns/style_variants.rb', styles_content
 
 empty_directory 'app/rest_clients'
-copy_file 'templates/application_rest_client.rb', 'app/rest_clients/application_rest_client.rb'
+ar_content = URI.open("https://raw.githubusercontent.com/jurgen1c/rails-boilerplate/main/templates/application_rest_client.rb").read
+create_file 'app/rest_clients/application_rest_client.rb', ar_content
 
 empty_directory 'app/services'
-copy_file 'templates/application_service.rb', 'app/services/application_service.rb'
+as_content = URI.open("https://raw.githubusercontent.com/jurgen1c/rails-boilerplate/main/templates/application_service.rb").read
+create_file 'app/services/application_service.rb', as_content
 
 empty_directory 'spec/support'
 create_file "spec/support/factory_bot.rb", <<-CODE
