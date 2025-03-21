@@ -6,4 +6,4 @@
 --skip-system-test
 --no-devcontainer
 
---template=./template.rb
+--template=https://github.com/jurgen1c/rails-boilerplate/blob/main/template.rb
