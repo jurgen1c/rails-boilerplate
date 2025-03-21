@@ -10,6 +10,7 @@ gem 'devise'
 gem "amazing_print"
 gem "rails_semantic_logger"
 gem 'sorbet-runtime'
+gem 'friendly_id', '~> 5.5.0'
 
 gem_group :development, :test do
   gem "rspec-rails"
@@ -69,6 +70,12 @@ after_bundle do
       maximum_coverage_drop line: 5, branch: 10
     end
   RUBY
+  end
+
+  inject_into_file "javascript/appliction.js", after: "import './controllers'\n" do
+    <<-JS
+    import "flowbite/dist/flowbite.turbo.js";
+    JS
   end
 
   run 'bundle exec tapioca init'
