@@ -32,6 +32,12 @@ gem_group :test do
   gem 'simplecov', require: false
 end
 
+# Set the source paths for file operations
+def source_paths
+  [File.expand_path(__dir__), File.expand_path(File.join(__dir__, 'templates'))]
+end
+
+
 after_bundle do
   rails_command 'active_storage:install'
   rails_command 'g rspec:install'
@@ -59,7 +65,10 @@ after_bundle do
   end
 end
 
-copy_file 'templates/pagy.rb', 'config/initializers/pagy.rb'
+# copy_file 'templates/pagy.rb', 'config/initializers/pagy.rb'
+require "open-uri"
+file_content = URI.open("https://raw.githubusercontent.com/jurgen1c/rails-boilerplate/main/templates/pagy.rb").read
+initializer 'pagy.rb', file_content
 
 run 'bun install eslint --save-dev'
 run 'bun install flowbite postcss'
