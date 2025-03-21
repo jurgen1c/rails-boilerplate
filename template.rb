@@ -32,11 +32,6 @@ gem_group :test do
   gem 'simplecov', require: false
 end
 
-# Set the source paths for file operations
-def source_paths
-  [File.expand_path(__dir__), File.expand_path(File.join(__dir__, 'templates'))]
-end
-
 
 after_bundle do
   rails_command 'active_storage:install'
@@ -53,7 +48,6 @@ after_bundle do
   rails_command 'g actiontext:install'
   rails_command 'g pundit:install'
 
-  run 'bundle exec tapioca init'
 
   inject_into_file "app/views/layouts/application.html.erb", before: "</body>" do
     <<-ERB
@@ -63,6 +57,18 @@ after_bundle do
       <% end %>
     ERB
   end
+
+  run 'bundle exec tapioca init'
+
+  say_status("bun", "Installing client side dependencies...", :blue)
+  run 'bun add eslint --dev'
+  run 'bun add flowbite postcss'
+
+  git add: '.'
+  git commit: "-m 'initial commit'"
+
+  say_status("create", "Created initial commit", :green)
+  rails_command 'db:create'
 end
 
 require "open-uri"
@@ -134,12 +140,3 @@ module.exports = {
   ]
 }
 JS
-
-run 'bun add eslint --dev'
-run 'bun add flowbite postcss'
-
-git add: '.'
-git commit: "-m 'initial commit'"
-
-say_status("create", "Created initial commit", :green)
-rails_command 'db:create'
